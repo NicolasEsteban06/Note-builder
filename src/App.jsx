@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
 import ActionsGuide from './components/ActionsGuide';
+import Settings from './components/Settings';
 import {
   clientActions,
   timeActions,
@@ -11,10 +12,16 @@ import {
   internalActions,
   documentActions
 } from './data/phrases';
+import { defaultSettings } from './data/illustrations';
 
 function App() {
   const [currentFocus, setCurrentFocus] = useState('actionsCompleted');
   const [showGuide, setShowGuide] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [settings, setSettings] = useState(() => {
+    const saved = localStorage.getItem('noteBuilderSettings');
+    return saved ? JSON.parse(saved) : defaultSettings;
+  });
   const [noteData, setNoteData] = useState({
     title1: '',
     title2: '',
@@ -25,6 +32,11 @@ function App() {
     timeAllocation: '',
     totalTime: ''
   });
+
+  // Save settings to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('noteBuilderSettings', JSON.stringify(settings));
+  }, [settings]);
 
   const updateNoteData = (field, value) => {
     setNoteData(prev => ({
@@ -76,7 +88,10 @@ function App() {
 
   return (
     <div className="container">
-      <Header onOpenGuide={() => setShowGuide(true)} />
+      <Header
+        onOpenGuide={() => setShowGuide(true)}
+        onOpenSettings={() => setShowSettings(true)}
+      />
 
       <div className="main-layout">
         <Sidebar
@@ -110,6 +125,14 @@ function App() {
         <ActionsGuide
           onClose={() => setShowGuide(false)}
           onPhraseClick={addToNote}
+        />
+      )}
+
+      {showSettings && (
+        <Settings
+          settings={settings}
+          onUpdateSettings={setSettings}
+          onClose={() => setShowSettings(false)}
         />
       )}
     </div>

@@ -9,6 +9,11 @@
   align-items: center;
 }
 
+.header-buttons {
+  display: flex;
+  gap: 10px;
+}
+
 .header h1 {
   margin-bottom: 5px;
 }
@@ -18,8 +23,8 @@
   font-size: 14px;
 }
 
-.guide-button {
-  background-color: #e74c3c;
+.guide-button,
+.settings-button {
   color: white;
   border: none;
   padding: 12px 24px;
@@ -30,8 +35,20 @@
   transition: background-color 0.3s;
 }
 
+.guide-button {
+  background-color: #e74c3c;
+}
+
 .guide-button:hover {
   background-color: #c0392b;
+}
+
+.settings-button {
+  background-color: #3498db;
+}
+
+.settings-button:hover {
+  background-color: #2980b9;
 }
 
 @media (max-width: 768px) {
